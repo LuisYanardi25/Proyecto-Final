@@ -1,0 +1,12 @@
+meta {
+  name: Products - Delete
+  type: http
+}
+
+delete {
+  url: http://localhost:5000/api/products/{{PRODUCT_ID}}
+}
+
+headers {
+  Authorization: Bearer {{TOKEN}}
+}

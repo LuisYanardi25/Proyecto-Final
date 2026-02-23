@@ -1,0 +1,21 @@
+meta {
+  name: Products - Update
+  type: http
+}
+
+patch {
+  url: http://localhost:5000/api/products/{{PRODUCT_ID}}
+  body: json
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{TOKEN}}
+}
+
+body:json {
+  {
+    "price": 2000,
+    "stock": 25
+  }
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Products - Create
+  type: http
+}
+
+post {
+  url: http://localhost:5000/api/products
+  body: json
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{TOKEN}}
+}
+
+body:json {
+  {
+    "name": "Par de medias",
+    "price": 1500,
+    "stock": 10,
+    "category": "Ropa",
+    "description": "Algodón unisex"
+  }
+}
