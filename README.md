@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+## Funcionamiento del proyecto
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta API REST está desarrollada con **TypeScript + Express** y persiste datos en **MongoDB** usando **Mongoose**.  
+Incluye:
 
-Currently, two official plugins are available:
+- **Registro y login** de usuarios.
+- Contraseñas hasheadas con **bcryptjs**.
+- Autenticación y protección de rutas con **JWT** (header `Authorization: Bearer <token>`).
+- Validación de datos con **Zod** (body y query params).
+- CRUD completo de la entidad **Products**.
+- **Filtrado por query params** en el endpoint de listado (ej: `minPrice`, `category`, `q`).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Instalación y ejecución
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Requisitos
 
-## Expanding the ESLint configuration
+- Node.js (18+ recomendado)
+- MongoDB local o MongoDB Atlas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Pasos
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Instalar dependencias:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Crear un archivo .env en la raíz del proyecto:
+   PORT=5000
+   MONGO_URI=mongodb://127.0.0.1:27017/tp_utn
+   JWT_SECRET=super-secret-cambiame-por-uno-largo-12345
+   JWT_EXPIRES_IN=1d
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3.Ejecutar en desarrollo:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+npm run dev
+
+4. La Api corre en: http://localhost:5000
+
+## EndPoints
+
+GET /health → estado de la API
+
+## Auth
+
+POST /api/auth/register → registrar usuario
+{ "name": "Luis", "email": "luis@test.com", "password": "123456" }
+
+POST /api/auth/login → login (devuelve token JWT)
+{ "email": "luis@test.com", "password": "123456" }
+
+Products (CRUD)
+
+GET /api/products → listar productos (con filtros por query params)
+
+Ejemplo requerido: GET /api/products?minPrice=1000
+
+Otros filtros: maxPrice, category, q, minStock, maxStock
+
+GET /api/products/:id → obtener producto por id
+
+POST /api/products → crear producto (protegido JWT)
+Headers: Authorization: Bearer <token>
+
+{
+"name": "Par de medias",
+"price": 1500,
+"stock": 10,
+"category": "Ropa",
+"description": "Algodón unisex"
+}
